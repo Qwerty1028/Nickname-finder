@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Hunter Settings</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            background-color: var(--tg-theme-bg-color, #18181b);
+            color: var(--tg-theme-text-color, #ffffff);
+        }
+    </style>
+</head>
+<body class="p-4 font-sans antialiased">
+
+    <div class="max-w-md mx-auto space-y-6">
+        <div class="text-center">
+            <h1 class="text-2xl font-black tracking-wider text-cyan-400">CYBER CONFIG v2.5</h1>
+            <p class="text-xs opacity-60 mt-1">Настройка параметров поискового ядра</p>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium opacity-80 mb-1">Минимальный скоринг (1-10):</label>
+                <input type="number" id="min_score" min="1" max="10" value="1" 
+                       class="w-full px-3 py-2 rounded-lg border bg-zinc-800/50 border-zinc-700 focus:outline-none focus:border-cyan-500 text-white">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium opacity-80 mb-1">Старт с (буква):</label>
+                    <input type="text" id="start_char" maxlength="1" placeholder="Любая" 
+                           class="w-full px-3 py-2 rounded-lg border bg-zinc-800/50 border-zinc-700 focus:outline-none focus:border-cyan-500 text-white uppercase">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium opacity-80 mb-1">Финиш на (буква):</label>
+                    <input type="text" id="end_char" maxlength="1" placeholder="Любая" 
+                           class="w-full px-3 py-2 rounded-lg border bg-zinc-800/50 border-zinc-700 focus:outline-none focus:border-cyan-500 text-white uppercase">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium opacity-80 mb-1">Описание для авто-каналов:</label>
+                <textarea id="channel_desc" rows="3" maxlength="255"
+                          class="w-full px-3 py-2 rounded-lg border bg-zinc-800/50 border-zinc-700 focus:outline-none focus:border-cyan-500 text-white text-sm"
+                          placeholder="Введите текст, который будет установлен в описание зарезервированного канала..."></textarea>
+            </div>
+        </div>
+
+        <button id="save_btn" class="w-full py-3 bg-cyan-600 hover:bg-cyan-500 active:scale-98 transition text-white font-bold rounded-xl shadow-lg shadow-cyan-950/50 cursor-pointer">
+            💾 СОХРАНИТЬ В МАТРИЦУ
+        </button>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Расширяем на весь экран
+
+        // Назначаем цвета кнопок под тему ТГ
+        const saveBtn = document.getElementById('save_btn');
+        if (tg.themeParams.button_color) {
+            saveBtn.style.backgroundColor = tg.themeParams.button_color;
+            saveBtn.style.color = tg.themeParams.button_text_color;
+        }
+
+        // Логика отправки данных обратно в бот
+        saveBtn.addEventListener('click', () => {
+            const data = {
+                min_score: parseInt(document.getElementById('min_score').value) || 1,
+                start_char: document.getElementById('start_char').value.toLowerCase() || null,
+                end_char: document.getElementById('end_char').value.toLowerCase() || null,
+                channel_desc: document.getElementById('channel_desc').value || "Зарезервировано Cyber Hunter"
+            };
+
+            // Отправляем JSON-строку боту и закрываем мини-апп
+            tg.sendData(JSON.stringify(data));
+            tg.close();
+        });
+    </script>
+</body>
+</html>
