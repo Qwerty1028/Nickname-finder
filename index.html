@@ -3,80 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Hunter Settings</title>
+    <title>Cyber Hunter Control Center</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         body {
-            background-color: var(--tg-theme-bg-color, #18181b);
+            background-color: var(--tg-theme-bg-color, #09090b);
             color: var(--tg-theme-text-color, #ffffff);
+        }
+        .cyber-card {
+            background: rgba(39, 39, 42, 0.3);
+            border: 1px solid rgba(63, 63, 70, 0.5);
         }
     </style>
 </head>
-<body class="p-4 font-sans antialiased">
+<body class="p-4 font-sans antialiased selection:bg-cyan-500/30">
 
-    <div class="max-w-md mx-auto space-y-6">
+    <div class="max-w-md mx-auto space-y-5 pb-8">
+        <!-- Хедер -->
         <div class="text-center">
-            <h1 class="text-2xl font-black tracking-wider text-cyan-400">CYBER CONFIG v2.5</h1>
-            <p class="text-xs opacity-60 mt-1">Настройка параметров поискового ядра</p>
+            <h1 class="text-2xl font-black tracking-widest text-cyan-400">CYBER CORE v3.0</h1>
+            <p class="text-xs opacity-50 mt-1">Центр управления потоками сканирования</p>
         </div>
 
-        <div class="space-y-4">
+        <!-- БЛОК 1: АЛГОРИТМ И ГЕОМЕТРИЯ -->
+        <div class="cyber-card rounded-2xl p-4 space-y-4">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-cyan-500/80 border-b border-zinc-800 pb-1">🤖 Настройки генератора</h2>
+            
+            <!-- Стратегия -->
             <div>
-                <label class="block text-sm font-medium opacity-80 mb-1">Минимальный скоринг (1-10):</label>
-                <input type="number" id="min_score" min="1" max="10" value="1" 
-                       class="w-full px-3 py-2 rounded-lg border bg-zinc-800/50 border-zinc-700 focus:outline-none focus:border-cyan-500 text-white">
+                <label class="block text-xs font-medium opacity-70 mb-1.5">Стратегия поиска:</label>
+                <div class="grid grid-cols-2 gap-2 bg-zinc-900 p-1 rounded-xl border border-zinc-800">
+                    <label class="flex justify-center items-center py-2 rounded-lg cursor-pointer text-sm font-medium has-[:checked]:bg-cyan-600/20 has-[:checked]:text-cyan-400 transition">
+                        <input type="radio" name="gen_type" value="smart" checked class="sr-only"> 🧠 Умный
+                    </label>
+                    <label class="flex justify-center items-center py-2 rounded-lg cursor-pointer text-sm font-medium has-[:checked]:bg-cyan-600/20 has-[:checked]:text-cyan-400 transition">
+                        <input type="radio" name="gen_type" value="random" class="sr-only"> 🎲 Рандом
+                    </label>
+                </div>
             </div>
 
+            <!-- Длина и цифры -->
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium opacity-80 mb-1">Старт с (буква):</label>
-                    <input type="text" id="start_char" maxlength="1" placeholder="Любая" 
-                           class="w-full px-3 py-2 rounded-lg border bg-zinc-800/50 border-zinc-700 focus:outline-none focus:border-cyan-500 text-white uppercase">
+                    <label class="block text-xs font-medium opacity-70 mb-1.5">Длина никнейма:</label>
+                    <select id="length" class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 focus:outline-none focus:border-cyan-500 text-sm">
+                        <option value="5" selected>5 символов</option>
+                        <option value="6">6 символов</option>
+                    </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium opacity-80 mb-1">Финиш на (буква):</label>
-                    <input type="text" id="end_char" maxlength="1" placeholder="Любая" 
-                           class="w-full px-3 py-2 rounded-lg border bg-zinc-800/50 border-zinc-700 focus:outline-none focus:border-cyan-500 text-white uppercase">
+                    <label class="block text-xs font-medium opacity-70 mb-1.5">Включать цифры:</label>
+                    <div class="grid grid-cols-2 gap-1 bg-zinc-900 p-1 rounded-xl border border-zinc-800">
+                        <label class="flex justify-center items-center py-1.5 rounded-lg cursor-pointer text-xs font-medium has-[:checked]:bg-zinc-800 has-[:checked]:text-white transition">
+                            <input type="radio" name="use_digits" value="true" checked class="sr-only"> Да
+                        </label>
+                        <label class="flex justify-center items-center py-1.5 rounded-lg cursor-pointer text-xs font-medium has-[:checked]:bg-zinc-800 has-[:checked]:text-white transition">
+                            <input type="radio" name="use_digits" value="false" class="sr-only"> Нет
+                        </label>
+                    </div>
                 </div>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium opacity-80 mb-1">Описание для авто-каналов:</label>
-                <textarea id="channel_desc" rows="3" maxlength="255"
-                          class="w-full px-3 py-2 rounded-lg border bg-zinc-800/50 border-zinc-700 focus:outline-none focus:border-cyan-500 text-white text-sm"
-                          placeholder="Введите текст, который будет установлен в описание зарезервированного канала..."></textarea>
             </div>
         </div>
 
-        <button id="save_btn" class="w-full py-3 bg-cyan-600 hover:bg-cyan-500 active:scale-98 transition text-white font-bold rounded-xl shadow-lg shadow-cyan-950/50 cursor-pointer">
-            💾 СОХРАНИТЬ В МАТРИЦУ
+        <!-- БЛОК 2: ФИЛЬТРЫ И МАСКИ -->
+        <div class="cyber-card rounded-2xl p-4 space-y-4">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-cyan-500/80 border-b border-zinc-800 pb-1">⚙️ Матрица фильтрации</h2>
+            
+            <!-- Скоринг -->
+            <div>
+                <label class="block text-xs font-medium opacity-70 mb-1.5">Минимальный скоринг качества (1-10):</label>
+                <input type="number" id="min_score" min="1" max="10" value="1" 
+                       class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 focus:outline-none focus:border-cyan-500 text-sm">
+            </div>
+
+            <!-- Символьные ограничения -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium opacity-70 mb-1.5">Старт с буквы:</label>
+                    <input type="text" id="start_char" maxlength="1" placeholder="Любая" 
+                           class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 focus:outline-none focus:border-cyan-500 text-sm uppercase text-center">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium opacity-70 mb-1.5">Финиш на букву:</label>
+                    <input type="text" id="end_char" maxlength="1" placeholder="Любая" 
+                           class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 focus:outline-none focus:border-cyan-500 text-sm uppercase text-center">
+                </div>
+            </div>
+        </div>
+
+        <!-- БЛОК 3: РЕЗЕРВАЦИЯ -->
+        <div class="cyber-card rounded-2xl p-4 space-y-3">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-cyan-500/80 border-b border-zinc-800 pb-1">📦 Параметры авто-резерва</h2>
+            <div>
+                <label class="block text-xs font-medium opacity-70 mb-1.5">Описание создаваемых каналов:</label>
+                <textarea id="channel_desc" rows="2" maxlength="255"
+                          class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 focus:outline-none focus:border-cyan-500 text-xs"
+                          placeholder="Текст описания для привязанного юзернейма..."></textarea>
+            </div>
+        </div>
+
+        <!-- БЛОК 4: ЦЕЛЬ СЕССИИ -->
+        <div class="cyber-card rounded-2xl p-4 space-y-3">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-cyan-500/80 border-b border-zinc-800 pb-1">🎯 Объём сессии</h2>
+            <label class="block text-xs font-medium opacity-70">Сколько свободных ников найти:</label>
+            <div class="grid grid-cols-4 gap-2">
+                <label class="flex flex-col items-center justify-center py-2.5 rounded-xl border border-zinc-800 bg-zinc-900 cursor-pointer has-[:checked]:border-cyan-500 has-[:checked]:bg-cyan-950/20 text-sm font-bold transition">
+                    <input type="radio" name="target_count" value="1" checked class="sr-only"> 1
+                </label>
+                <label class="flex flex-col items-center justify-center py-2.5 rounded-xl border border-zinc-800 bg-zinc-900 cursor-pointer has-[:checked]:border-cyan-500 has-[:checked]:bg-cyan-950/20 text-sm font-bold transition">
+                    <input type="radio" name="target_count" value="3" class="sr-only"> 3
+                </label>
+                <label class="flex flex-col items-center justify-center py-2.5 rounded-xl border border-zinc-800 bg-zinc-900 cursor-pointer has-[:checked]:border-cyan-500 has-[:checked]:bg-cyan-950/20 text-sm font-bold transition">
+                    <input type="radio" name="target_count" value="5" class="sr-only"> 5
+                </label>
+                <label class="flex flex-col items-center justify-center py-2.5 rounded-xl border border-zinc-800 bg-zinc-900 cursor-pointer has-[:checked]:border-cyan-500 has-[:checked]:bg-cyan-950/20 text-sm font-bold transition">
+                    <input type="radio" name="target_count" value="10" class="sr-only"> 10
+                </label>
+            </div>
+        </div>
+
+        <!-- ГЛАВНАЯ КНОПКА ЗАПУСКА -->
+        <button id="launch_btn" class="w-full py-3.5 bg-cyan-600 hover:bg-cyan-500 active:scale-98 transition text-white font-black tracking-wider rounded-xl shadow-lg shadow-cyan-950/40 cursor-pointer text-sm">
+            🚀 ЗАПУСТИТЬ ОХОТУ
         </button>
     </div>
 
     <script>
-        // Инициализация Telegram WebApp
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Расширяем на весь экран
+        tg.expand();
 
-        // Назначаем цвета кнопок под тему ТГ
-        const saveBtn = document.getElementById('save_btn');
+        const launchBtn = document.getElementById('launch_btn');
         if (tg.themeParams.button_color) {
-            saveBtn.style.backgroundColor = tg.themeParams.button_color;
-            saveBtn.style.color = tg.themeParams.button_text_color;
+            launchBtn.style.backgroundColor = tg.themeParams.button_color;
+            launchBtn.style.color = tg.themeParams.button_text_color;
         }
 
-        // Логика отправки данных обратно в бот
-        saveBtn.addEventListener('click', () => {
-            const data = {
-                min_score: parseInt(document.getElementById('min_score').value) || 1,
-                start_char: document.getElementById('start_char').value.toLowerCase() || null,
-                end_char: document.getElementById('end_char').value.toLowerCase() || null,
-                channel_desc: document.getElementById('channel_desc').value || "Зарезервировано Cyber Hunter"
+        launchBtn.addEventListener('click', () => {
+            const genType = document.querySelector('input[name="gen_type"]:checked').value;
+            const length = parseInt(document.getElementById('length').value);
+            const useDigits = document.querySelector('input[name="use_digits"]:checked').value === "true";
+            const minScore = parseInt(document.getElementById('min_score').value) || 1;
+            const startChar = document.getElementById('start_char').value.toLowerCase() || null;
+            const endChar = document.getElementById('end_char').value.toLowerCase() || null;
+            const channelDesc = document.getElementById('channel_desc').value || "Зарезервировано системой Cyber Hunter";
+            const targetCount = parseInt(document.querySelector('input[name="target_count"]:checked').value);
+
+            // Упаковываем абсолютно всё в один дата-пакет
+            const payload = {
+                gen_type: genType,
+                length: length,
+                use_digits: useDigits,
+                min_score: minScore,
+                start_char: startChar,
+                end_char: endChar,
+                channel_desc: channelDesc,
+                target_count: targetCount
             };
 
-            // Отправляем JSON-строку боту и закрываем мини-апп
-            tg.sendData(JSON.stringify(data));
+            tg.sendData(JSON.stringify(payload));
             tg.close();
         });
     </script>
